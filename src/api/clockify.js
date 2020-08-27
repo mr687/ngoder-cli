@@ -10,10 +10,8 @@ const spinner = new Spinner(' Loading... ', ['😩', '👩‍🎤', '👢', '�
 
 const { config } = require('../config');
 
-require('dotenv').config();
-
 const api = axios.create({
-  baseURL: process.env.CLOCKIFY_API_URL,
+  baseURL: 'https://api.clockify.me/api/v1',
   headers: {
     'X-Api-Key': config.get('clockify.api_key'),
     'Content-Type': 'Application/json',

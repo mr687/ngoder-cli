@@ -1,6 +1,6 @@
 {
   "name": "ngoder-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Command Line Interface to make it easier to start and stop time tracker [clockify](https://clockify.me), etc.",
   "scripts": {
     "lint": "eslint --fix src/"
@@ -24,7 +24,6 @@
     "clui": "^0.3.6",
     "commander": "^6.0.0",
     "configstore": "^5.0.1",
-    "dotenv": "^8.2.0",
     "figlet": "^1.5.0",
     "git-branch": "^2.0.1",
     "inquirer": "^7.3.3",
