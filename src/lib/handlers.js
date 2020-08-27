@@ -4,7 +4,7 @@ const clear = require('clear');
 const inquirer = require('./inquirer');
 
 const handlerClockify = async (obj) => {
-  clear();
+  // clear();
   if (obj.init) await inquirer.setInitClockify();
   if (obj.start) await inquirer.startTimeTracker();
   if (obj.stop) await inquirer.stopTimeTracker();
