@@ -18,6 +18,7 @@ const main = async () => {
     .option('-i, --init', 'Setting | update clockify configuration')
     .option('-s, --start', 'Start time tracker')
     .option('-x, --stop', 'Stop time tracker')
+    .option('-c, --change', 'Change time tracker (delete | update)')
     .action(handlerClockify);
 
   await program.parseAsync(process.argv);

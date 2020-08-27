@@ -8,7 +8,10 @@
   "bin": {
     "ngoder": "src/index.js"
   },
-  "keywords": ["cli","ngoder"],
+  "keywords": [
+    "cli",
+    "ngoder"
+  ],
   "author": "Daphinokio",
   "license": "MIT",
   "devDependencies": {
@@ -17,6 +20,7 @@
     "eslint-plugin-import": "^2.22.0"
   },
   "dependencies": {
+    "@gitbeaker/node": "^23.5.0",
     "axios": "^0.20.0",
     "chalk": "^4.1.0",
     "clear": "^0.1.0",

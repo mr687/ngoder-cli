@@ -133,8 +133,60 @@ const stopTimeTracker = async () => {
   await clockify.stopTracker(answer);
 };
 
+const updateTimeEntry = async () => {
+  const timeEntries = await clockify.timeEntries(5);
+  const ask = async () => inquirer.prompt([
+    {
+      name: 'time',
+      message: 'Select time entry',
+      type: 'list',
+      choices: () => {
+        const list = [];
+        timeEntries.forEach((item, k) => list.push({
+          name: `${k + 1}) ${item.description}`,
+          value: item,
+        }));
+        return list;
+      },
+    },
+  ]);
+
+  const answer = await ask();
+  const entry = answer.time;
+
+  const askAction = async () => inquirer.prompt([
+    {
+      type: 'list',
+      message: '',
+      name: 'action',
+      choices: ['update', 'delete'],
+    },
+  ]);
+
+  const answerAction = await askAction();
+  if (answerAction.action === 'update') {
+    const askDesc = async () => inquirer.prompt([
+      {
+        type: 'input',
+        message: 'Enter new description',
+        name: 'desc',
+        default: (await branch()).toString(),
+      },
+    ]);
+
+    const answerDesc = await askDesc();
+    const newData = entry;
+    newData.description = answerDesc.desc;
+    await clockify.updateTimeEntry(entry, newData);
+  }
+  if (answerAction.action === 'delete') {
+    await clockify.deleteTimeEntry(entry);
+  }
+};
+
 module.exports = {
   setInitClockify,
   startTimeTracker,
   stopTimeTracker,
+  updateTimeEntry,
 };

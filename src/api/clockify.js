@@ -1,41 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-const axios = require('axios');
 const chalk = require('chalk');
-const Clui = require('clui');
-
-const { Spinner } = Clui;
-
-const spinner = new Spinner(' Loading... ', ['😩', '👩‍🎤', '👢', '🚀', '💥', '🤬', '🏡']);
 
 const { config } = require('../config');
+const api = require('../lib/axios');
 
-const api = axios.create({
-  baseURL: 'https://api.clockify.me/api/v1',
-  headers: {
-    'X-Api-Key': config.get('clockify.api_key'),
-    'Content-Type': 'Application/json',
-  },
-});
-
-api.interceptors.response.use((response) => {
-  spinner.stop();
-  return response;
-}, (error) => {
-  spinner.stop();
-  if (error.response.status === 401) {
-    console.error('[ERROR] Invalid API key 😩😩!!');
-  }
-  return Promise.reject(error);
-});
-
-api.interceptors.request.use((config) => {
-  spinner.start();
-  return config;
-}, (error) => {
-  spinner.stop();
-  return Promise.reject(error);
-});
+api.defaults.baseURL = 'https://api.clockify.me/api/v1';
+api.defaults.headers.common['X-Api-Key'] = config.get('clockify.api_key');
 
 const userInfo = async () => {
   config.get('clockify.api_key');
@@ -66,6 +37,43 @@ const tasks = async (_workspaceId, _projectId) => {
   }
 };
 
+const timeEntries = async (n) => {
+  const workspaceId = config.get('clockify.workspace.id');
+  const userId = config.get('clockify.user.id');
+
+  const res = await api.get(`/workspaces/${workspaceId}/user/${userId}/time-entries`, {
+    'page-size': n,
+  });
+  if (res.status === 200 || res.status === 201) {
+    return res.data;
+  }
+};
+
+const deleteTimeEntry = async (item) => {
+  const workspaceId = config.get('clockify.workspace.id');
+  const res = await api.delete(`/workspaces/${workspaceId}/time-entries/${item.id}`);
+  if (res.status === 204) {
+    console.info(`\n🚀  ${chalk.blue('Deleted successfully !!')}`);
+  }
+};
+
+const updateTimeEntry = async (old, data) => {
+  const workspaceId = config.get('clockify.workspace.id');
+  const newData = {
+    start: data.timeInterval.start,
+    billable: data.billable,
+    description: data.description,
+    projectId: data.projectId,
+    taskId: data.taskId,
+    end: data.timeInterval.end,
+  };
+  const res = await api.put(`/workspaces/${workspaceId}/time-entries/${old.id}`, newData);
+
+  if (res.status === 200) {
+    console.info(`\n💥  ${chalk.blue('Updated successfully !!')}`);
+  }
+};
+
 const startTracker = async (obj) => {
   const data = {
     ...obj,
@@ -84,7 +92,7 @@ const startTracker = async (obj) => {
   });
 
   if (res.status === 201) {
-    console.info(`🚀 ${chalk.blue('Time tracker started !')}`);
+    console.info(`\n🚀 ${chalk.blue('Time tracker started !')}`);
   }
 };
 
@@ -101,8 +109,8 @@ const stopTracker = async (obj) => {
     end: data.end,
   });
 
-  if (res.status === 201) {
-    console.info(`😩 ${chalk.blue('Time tracker stopped !')}`);
+  if (res.status === 200) {
+    console.info(`\n😩 ${chalk.blue('Time tracker stopped !')}`);
   }
 };
 
@@ -111,6 +119,9 @@ module.exports = {
   workspaces,
   projects,
   tasks,
+  timeEntries,
   startTracker,
   stopTracker,
+  updateTimeEntry,
+  deleteTimeEntry,
 };
