@@ -1,7 +1,7 @@
 # Welcome to ngoder-cli 👋
 > Made with ❤ by Daphinokio
 
-![Version](https://img.shields.io/badge/version-0.0.2-blue.svg?cacheSeconds=2592000)
+![Version](https://img.shields.io/badge/version-0.0.4-blue.svg?cacheSeconds=2592000)
 [![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://cli.ngoder.com/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
 [![Twitter: daphinokio](https://img.shields.io/twitter/follow/daphinokio.svg?style=social)](https://twitter.com/daphinokio)
